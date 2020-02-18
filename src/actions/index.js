@@ -1,6 +1,6 @@
 import * as types from "../constants/ActionTypes";
 
-const url = "http://localhost:4000/contacts/";
+const url = "https://data-manage-contacts.herokuapp.com/contacts/";
 // lấy data trên server về
 export const fetchContacts = () => {
   return async dispatch => {
