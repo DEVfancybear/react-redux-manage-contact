@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import React, { Component } from "react";
+import ContactForm from "./components/ContactForm";
+import ContactList from "./components/ContactList";
+import EditContact from "./components/EditContact";
+import { connect } from "react-redux";
+class App extends Component {
+  render() {
+    return (
+      <div className="container">
+        <h1 className="alert alert-info">React-Redux Demo App</h1>
+        <div className="row">
+          <div className="col">
+            {this.props.editStatus ? <EditContact /> : <ContactForm />}
+          </div>
+          <div className="col">
+            <ContactList />
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
-
-export default App;
+const mapStateToprops = state => {
+  return {
+    editStatus: state.contactsReducer.editStatus
+  };
+};
+export default connect(mapStateToprops, null)(App);
