@@ -1,1 +1,1 @@
-### [LIVE DEMO](https://react-redux-manage-task.now.sh/)
+### [LIVE DEMO](https://react-redux-manage-contacts.now.sh/)
