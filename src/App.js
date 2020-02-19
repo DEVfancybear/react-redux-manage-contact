@@ -7,7 +7,7 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-        <h1 className="alert alert-info">React-Redux Demo App</h1>
+        <h1 className="alert alert-info">React-Redux Manage Contacts</h1>
         <div className="row">
           <div className="col">
             {this.props.editStatus ? <EditContact /> : <ContactForm />}

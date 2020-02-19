@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { deleteContact, editStatus, getEditData } from "../actions/index";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 class ContactCard extends Component {
   deleteContact = id => {
     this.props.deleteContact(id);
-  }
-  editStatus = contactId => {
+  };
+  editStatus = (contactId, contact) => {
     this.props.editStatus();
-    this.props.getEditData(contactId);
+    this.props.getEditData(contactId, contact);
   };
   render() {
     const { contact } = this.props;
@@ -31,17 +33,17 @@ class ContactCard extends Component {
                   onClick={() => {
                     this.deleteContact(contact.id);
                   }}
-                  class="btn btn-link float-right"
+                  className="btn btn-link float-right"
                 >
-                  &times;
+                  <FontAwesomeIcon icon={faTrash} />
                 </button>
                 <button
                   onClick={() => {
-                    this.editStatus(contact);
+                    this.editStatus(contact.id, contact);
                   }}
-                  class="btn btn-link float-right"
+                  className="btn btn-link float-right"
                 >
-                  &times;
+                  <FontAwesomeIcon icon={faEdit} />
                 </button>
               </h5>
               <div className="card-text">{contact.email}</div>
@@ -61,8 +63,8 @@ const mapDispatchToProps = (dispatch, props) => {
     editStatus: () => {
       dispatch(editStatus());
     },
-    getEditData: contactId => {
-      dispatch(getEditData(contactId));
+    getEditData: (contactId, contact) => {
+      dispatch(getEditData(contactId, contact));
     }
   };
 };

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { editContact } from "../actions/index";
+import { editContact, editStatus } from "../actions/index";
 class EditContact extends Component {
   constructor(props) {
     super(props);
@@ -18,7 +18,7 @@ class EditContact extends Component {
       errorMessages: ""
     };
   }
-  componentWillMount = () => {
+  UNSAFE_componentWillMount = () => {
     if (this.props.contact) {
       this.setState({
         id: this.props.contact.id,
@@ -29,16 +29,7 @@ class EditContact extends Component {
       });
     }
   };
-  saveDataEdit = e => {
-    e.preventDefault();
-    let info = {};
-    info.id = this.state.id;
-    info.name = this.state.name;
-    info.email = this.state.email;
-    info.picture = this.state.picture;
-    info.phone = this.state.phone;
-    this.props.editContact(this.state.id, info);
-  };
+
   tfHandler = ({ target }) => {
     let { name, value } = target;
     let { formErrors } = this.state;
@@ -83,7 +74,18 @@ class EditContact extends Component {
     );
     return valid;
   };
+  saveDataEdit = e => {
+    e.preventDefault();
 
+    let info = {};
+    info.id = this.state.id;
+    info.name = this.state.name;
+    info.email = this.state.email;
+    info.picture = this.state.picture;
+    info.phone = this.state.phone;
+    this.props.editContact(this.state.id, info);
+    this.props.editStatus();
+  };
   submitHandler = evt => {
     evt.preventDefault();
 
@@ -178,6 +180,9 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     editContact: (id, contact) => {
       dispatch(editContact(id, contact));
+    },
+    editStatus: () => {
+      dispatch(editStatus());
     }
   };
 };
