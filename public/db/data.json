@@ -1,20 +1,6 @@
 {
   "contacts": [
     {
-      "id": 8,
-      "name": "Mikael Boldock444 (",
-      "email": "mboldock7@pinterest.com",
-      "picture": "http://kvinod.com/old_ci/randomdata/images/men/8.jpg",
-      "phone": "5224658824"
-    },
-    {
-      "id": 10,
-      "name": "Dennis Tieraney",
-      "email": "dtieraney9@weibo.com",
-      "picture": "http://kvinod.com/old_ci/randomdata/images/men/10.jpg",
-      "phone": "5617011238rrrr"
-    },
-    {
       "id": 11,
       "name": "Almeda Gonzalez",
       "gender": "Female",

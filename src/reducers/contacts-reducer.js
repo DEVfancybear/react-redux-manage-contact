@@ -20,11 +20,9 @@ export default (state = initialState, action) => {
 
     case types.DELETE_CONTACT: {
       let contacts = [...state.contacts];
-      let index = contacts.findIndex(c => c.id === action.data);
-      if (index !== -1) {
-        contacts.splice(index, 1);
-      }
-      return { ...state, contacts };
+      let newData = contacts.filter(item => item.id !== id);
+
+      return { ...state, newData };
     }
 
     case types.FETCH_CONTACTS: {
