@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { editContact, editStatus } from "../actions/index";
+import { editContact, editStatus, getEditData } from "../actions/index";
 class EditContact extends Component {
   constructor(props) {
     super(props);
@@ -18,16 +18,8 @@ class EditContact extends Component {
       errorMessages: ""
     };
   }
-  UNSAFE_componentWillMount = () => {
-    if (this.props.contact) {
-      this.setState({
-        id: this.props.contact.id,
-        name: this.props.contact.name,
-        email: this.props.contact.email,
-        phone: this.props.contact.phone,
-        picture: this.props.contact.picture
-      });
-    }
+  componentDidMount = () => {
+    this.props.getPostDetailFetch(this.state.id);
   };
 
   tfHandler = ({ target }) => {
@@ -96,7 +88,7 @@ class EditContact extends Component {
     this.setState({ errorMessages });
   };
   render() {
-    console.log(this.state);
+    console.log(this.props.contact);
     return (
       <div>
         <h3>Edit Contact</h3>
@@ -183,6 +175,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     editStatus: () => {
       dispatch(editStatus());
+    },
+    getPostDetailFetch: contactId => {
+      dispatch(getEditData(contactId));
     }
   };
 };

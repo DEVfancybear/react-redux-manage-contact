@@ -7,9 +7,9 @@ class ContactCard extends Component {
   deleteContact = id => {
     this.props.deleteContact(id);
   };
-  editStatus = (contactId, contact) => {
+  editStatus = contactId => {
     this.props.editStatus();
-    this.props.getEditData(contactId, contact);
+    this.props.getEditData(contactId);
   };
   render() {
     const { contact } = this.props;
@@ -39,7 +39,7 @@ class ContactCard extends Component {
                 </button>
                 <button
                   onClick={() => {
-                    this.editStatus(contact.id, contact);
+                    this.editStatus(contact.id);
                   }}
                   className="btn btn-link float-right"
                 >
@@ -55,6 +55,7 @@ class ContactCard extends Component {
     );
   }
 }
+
 const mapDispatchToProps = (dispatch, props) => {
   return {
     deleteContact: id => {
@@ -63,8 +64,8 @@ const mapDispatchToProps = (dispatch, props) => {
     editStatus: () => {
       dispatch(editStatus());
     },
-    getEditData: (contactId, contact) => {
-      dispatch(getEditData(contactId, contact));
+    getEditData: contactId => {
+      dispatch(getEditData(contactId));
     }
   };
 };

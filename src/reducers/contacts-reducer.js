@@ -20,7 +20,7 @@ export default (state = initialState, action) => {
 
     case types.DELETE_CONTACT: {
       let contacts = [...state.contacts];
-      let newData = contacts.filter(item => item.id !== id);
+      let newData = contacts.filter(item => item.id !== action.data);
 
       return { ...state, newData };
     }

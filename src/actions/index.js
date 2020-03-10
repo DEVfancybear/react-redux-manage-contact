@@ -35,13 +35,15 @@ export const editStatus = () => dispatch => {
   });
 };
 // get data theo id khi click vào sửa thì sẽ hiện dữ liệu cũ của data đó
-export const getEditData = (contactId, contact) => async dispatch => {
-  console.log("testttt" + JSON.stringify(contact));
-  await fetch(url + contactId, { method: "GET" });
-  dispatch({
-    type: types.GET_EDIT_DATA,
-    data: contact
-  });
+export const getEditData = contactId => {
+  return async dispatch => {
+    let resp = await fetch(url + contactId);
+    console.log(resp);
+    let contacts = await resp.json();
+    let action = { type: types.GET_EDIT_DATA, data: contacts };
+    dispatch(action);
+    console.log("Fetch data edit" + JSON.stringify(action.data));
+  };
 };
 // update data lên server
 export const editContact = (id, contact) => async dispatch => {
