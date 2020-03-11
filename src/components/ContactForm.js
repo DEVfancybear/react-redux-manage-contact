@@ -1,25 +1,23 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { addContact } from "../actions/index";
-class ContactForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: "",
-      email: "",
-      phone: "",
-      picture: "",
-      formErrors: {
-        name: "Name is required",
-        email: "Email is required",
-        phone: "Phone is required"
-      },
-      errorMessages: ""
-    };
-  }
-  tfHandler = ({ target }) => {
-    let { name, value } = target;
-    let { formErrors } = this.state;
+const ContactForm = props => {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    picture: ""
+  });
+  const [formErrors, setFormErrors] = useState({
+    name: "Name is required",
+    email: "Email is required",
+    phone: "Phone is required"
+  });
+  const [errorMessages, setErrorMessages] = useState("");
+  const { name, email, phone, picture } = form;
+
+  const tfHandler = e => {
+    let { name, value } = e.target;
 
     switch (name) {
       case "name":
@@ -52,9 +50,10 @@ class ContactForm extends Component {
       default:
         break;
     }
-    this.setState({ [name]: value, formErrors });
+    setForm({ ...form, [e.target.name]: e.target.value });
+    setFormErrors(formErrors);
   };
-  validateForm = formErrors => {
+  const validateForm = formErrors => {
     let valid = true;
     Object.values(formErrors).forEach(
       val => (valid = valid && val.length === 0)
@@ -62,104 +61,102 @@ class ContactForm extends Component {
     return valid;
   };
 
-  submitHandler = evt => {
+  const submitHandler = evt => {
     evt.preventDefault();
 
-    let { formErrors } = this.state;
     let errorMessages = Object.values(formErrors).map((err, index) =>
       err.length === 0 ? null : <li key={index}>{err}</li>
     );
-    this.setState({ errorMessages });
 
-    if (this.validateForm(this.state.formErrors)) {
-      let { name, email, phone, picture } = this.state;
+    setErrorMessages(errorMessages);
+
+    if (validateForm(formErrors)) {
       let contact = { name, email, phone, picture };
 
-      this.props.addContact(contact);
+      props.addContact(contact);
 
-      this.setState({
+      setForm({
         name: "",
         email: "",
         phone: "",
-        picture: "",
-        formErrors: {
-          name: "Name is required",
-          email: "Email is required",
-          phone: "Phone is required"
-        },
-        errorMessages: ""
+        picture: ""
       });
+      setFormErrors({
+        name: "Name is required",
+        email: "Email is required",
+        phone: "Phone is required"
+      });
+      setErrorMessages("");
     }
   };
-  render() {
-    return (
-      <div>
-        <h3>Add a new contact</h3>
-        <form className="form" onSubmit={this.submitHandler}>
-          <div className="form-group row">
-            <label htmlFor="" className="control-label col-md-4">
-              Name
-            </label>
-            <div className="col-md-8">
-              <input
-                value={this.state.name}
-                onChange={this.tfHandler}
-                type="text"
-                className="form-control"
-                name="name"
-              />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="" className="control-label col-md-4">
-              Email address
-            </label>
-            <div className="col-md-8">
-              <input
-                value={this.state.email}
-                onChange={this.tfHandler}
-                type="text"
-                className="form-control"
-                name="email"
-              />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="" className="control-label col-md-4">
-              Phone number
-            </label>
-            <div className="col-md-8">
-              <input
-                value={this.state.phone}
-                onChange={this.tfHandler}
-                type="text"
-                className="form-control"
-                name="phone"
-              />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="" className="control-label col-md-4">
-              URL to picture/avatar
-            </label>
-            <div className="col-md-8">
-              <input
-                value={this.state.picture}
-                onChange={this.tfHandler}
-                type="text"
-                className="form-control"
-                name="picture"
-              />
-            </div>
-          </div>
-          <button className="btn btn-primary">Add to list</button>
-        </form>
 
-        <ul>{this.state.errorMessages}</ul>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <h3>Add a new contact</h3>
+      <form className="form" onSubmit={submitHandler}>
+        <div className="form-group row">
+          <label htmlFor="" className="control-label col-md-4">
+            Name
+          </label>
+          <div className="col-md-8">
+            <input
+              value={name}
+              onChange={tfHandler}
+              type="text"
+              className="form-control"
+              name="name"
+            />
+          </div>
+        </div>
+        <div className="form-group row">
+          <label htmlFor="" className="control-label col-md-4">
+            Email address
+          </label>
+          <div className="col-md-8">
+            <input
+              value={email}
+              onChange={tfHandler}
+              type="text"
+              className="form-control"
+              name="email"
+            />
+          </div>
+        </div>
+        <div className="form-group row">
+          <label htmlFor="" className="control-label col-md-4">
+            Phone number
+          </label>
+          <div className="col-md-8">
+            <input
+              value={phone}
+              onChange={tfHandler}
+              type="text"
+              className="form-control"
+              name="phone"
+            />
+          </div>
+        </div>
+        <div className="form-group row">
+          <label htmlFor="" className="control-label col-md-4">
+            URL to picture/avatar
+          </label>
+          <div className="col-md-8">
+            <input
+              value={picture}
+              onChange={tfHandler}
+              type="text"
+              className="form-control"
+              name="picture"
+            />
+          </div>
+        </div>
+        <button className="btn btn-primary">Add to list</button>
+      </form>
+
+      <ul>{errorMessages}</ul>
+    </div>
+  );
+};
 const mapDispatchToProps = (dispatch, props) => {
   return {
     addContact: contact => {

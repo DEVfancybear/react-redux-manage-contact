@@ -1,30 +1,29 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { editContact, editStatus, getEditData } from "../actions/index";
-class EditContact extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      id: this.props.contact.id,
-      name: this.props.contact.name,
-      email: this.props.contact.email,
-      phone: this.props.contact.phone,
-      picture: this.props.contact.picture,
-      formErrors: {
-        name: "Name is required",
-        email: "Email is required",
-        phone: "Phone is required"
-      },
-      errorMessages: ""
-    };
-  }
-  componentDidMount = () => {
-    this.props.getPostDetailFetch(this.state.id);
-  };
+const EditContact = ({ contact, editContact, editStatus }) => {
+  const [form, setForm] = useState({
+    id: "",
+    name: "",
+    email: "",
+    phone: "",
+    picture: ""
+  });
+  const [formErrors, setFormErrors] = useState({
+    name: "Name is required",
+    email: "Email is required",
+    phone: "Phone is required"
+  });
 
-  tfHandler = ({ target }) => {
-    let { name, value } = target;
-    let { formErrors } = this.state;
+  const { id, name, email, phone, picture } = form;
+
+  useEffect(() => {
+    if (contact.id) {
+      setForm(contact);
+    }
+  }, [contact]);
+  const tfHandler = e => {
+    let { name, value } = e.target;
 
     switch (name) {
       case "name":
@@ -57,28 +56,25 @@ class EditContact extends Component {
       default:
         break;
     }
-    this.setState({ [name]: value, formErrors });
+    setForm({ ...form, [name]: value });
+    setFormErrors(formErrors);
   };
-  validateForm = formErrors => {
-    let valid = true;
-    Object.values(formErrors).forEach(
-      val => (valid = valid && val.length === 0)
-    );
-    return valid;
-  };
-  saveDataEdit = e => {
+
+  const saveDataEdit = e => {
     e.preventDefault();
 
-    let info = {};
-    info.id = this.state.id;
-    info.name = this.state.name;
-    info.email = this.state.email;
-    info.picture = this.state.picture;
-    info.phone = this.state.phone;
-    this.props.editContact(this.state.id, info);
-    this.props.editStatus();
+    if (contact.id) {
+      let info = {};
+      info.id = id;
+      info.name = name;
+      info.email = email;
+      info.picture = picture;
+      info.phone = phone;
+      editContact(id, info);
+      editStatus();
+    }
   };
-  submitHandler = evt => {
+  const submitHandler = evt => {
     evt.preventDefault();
 
     let { formErrors } = this.state;
@@ -87,82 +83,80 @@ class EditContact extends Component {
     );
     this.setState({ errorMessages });
   };
-  render() {
-    console.log(this.props.contact);
-    return (
-      <div>
-        <h3>Edit Contact</h3>
-        <form className="form" onSubmit={this.submitHandler}>
-          <div className="form-group row">
-            <label htmlFor="" className="control-label col-md-4">
-              Name
-            </label>
-            <div className="col-md-8">
-              <input
-                defaultValue={this.state.name}
-                onChange={this.tfHandler}
-                type="text"
-                className="form-control"
-                name="name"
-              />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="" className="control-label col-md-4">
-              Email address
-            </label>
-            <div className="col-md-8">
-              <input
-                defaultValue={this.state.email}
-                onChange={this.tfHandler}
-                type="text"
-                className="form-control"
-                name="email"
-              />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="" className="control-label col-md-4">
-              Phone number
-            </label>
-            <div className="col-md-8">
-              <input
-                defaultValue={this.state.phone}
-                onChange={this.tfHandler}
-                type="text"
-                className="form-control"
-                name="phone"
-              />
-            </div>
-          </div>
-          <div className="form-group row">
-            <label htmlFor="" className="control-label col-md-4">
-              URL to picture/avatar
-            </label>
-            <div className="col-md-8">
-              <input
-                defaultValue={this.state.picture}
-                onChange={this.tfHandler}
-                type="text"
-                className="form-control"
-                name="picture"
-              />
-            </div>
-          </div>
-          <button
-            type="submit"
-            onClick={e => this.saveDataEdit(e)}
-            className="btn btn-primary"
-          >
-            Change edit to list
-          </button>
-        </form>
 
-        {/* <ul>{this.state.errorMessages}</ul> */}
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <h3>Edit Contact</h3>
+      <form className="form" onSubmit={submitHandler}>
+        <div className="form-group row">
+          <label htmlFor="" className="control-label col-md-4">
+            Name
+          </label>
+          <div className="col-md-8">
+            <input
+              defaultValue={name}
+              onChange={tfHandler}
+              type="text"
+              className="form-control"
+              name="name"
+            />
+          </div>
+        </div>
+        <div className="form-group row">
+          <label htmlFor="" className="control-label col-md-4">
+            Email address
+          </label>
+          <div className="col-md-8">
+            <input
+              defaultValue={email}
+              onChange={tfHandler}
+              type="text"
+              className="form-control"
+              name="email"
+            />
+          </div>
+        </div>
+        <div className="form-group row">
+          <label htmlFor="" className="control-label col-md-4">
+            Phone number
+          </label>
+          <div className="col-md-8">
+            <input
+              defaultValue={phone}
+              onChange={tfHandler}
+              type="text"
+              className="form-control"
+              name="phone"
+            />
+          </div>
+        </div>
+        <div className="form-group row">
+          <label htmlFor="" className="control-label col-md-4">
+            URL to picture/avatar
+          </label>
+          <div className="col-md-8">
+            <input
+              defaultValue={picture}
+              onChange={tfHandler}
+              type="text"
+              className="form-control"
+              name="picture"
+            />
+          </div>
+        </div>
+        <button
+          type="submit"
+          onClick={e => saveDataEdit(e)}
+          className="btn btn-primary"
+        >
+          Change edit to list
+        </button>
+      </form>
+
+      {/* <ul>{this.state.errorMessages}</ul> */}
+    </div>
+  );
+};
 const mapStateToProps = state => {
   return {
     contact: state.contactsReducer.contact
