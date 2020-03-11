@@ -14,7 +14,7 @@ const EditContact = ({ contact, editContact, editStatus }) => {
     email: "Email is required",
     phone: "Phone is required"
   });
-
+  const [errorMessages, setErrorMessages] = useState("");
   const { id, name, email, phone, picture } = form;
 
   useEffect(() => {
@@ -77,11 +77,11 @@ const EditContact = ({ contact, editContact, editStatus }) => {
   const submitHandler = evt => {
     evt.preventDefault();
 
-    let { formErrors } = this.state;
     let errorMessages = Object.values(formErrors).map((err, index) =>
       err.length === 0 ? null : <li key={index}>{err}</li>
     );
-    this.setState({ errorMessages });
+
+    setErrorMessages(errorMessages);
   };
 
   return (
